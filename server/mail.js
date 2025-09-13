@@ -1,8 +1,22 @@
 import nodemailer from 'nodemailer'
 
 
-
 let currentDate = new Date();
+const ai = new GoogleGenAI({
+    apikey: process.env.AI_API_KEY
+});
+
+
+async function main() {
+    const response = await ai.models.generateContent({
+        model: "gemini-2.5-flash",
+        contents: "You are giving a lecturer/professor analytics from there lecture I will provide you with the relevant info. Create a summary from it.",
+    });
+    console.log(response.text);
+}
+
+main();
+
 async function sendMail_analytics(userName, userEmail, Responses) {
 
 
@@ -34,6 +48,7 @@ async function sendMail_analytics(userName, userEmail, Responses) {
     catch (err) {
         console.error(err)
     }
+
 
 
 
