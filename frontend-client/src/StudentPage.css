@@ -1,0 +1,42 @@
+.flex-container {
+    padding-left: 3px;
+    padding-right: 7px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    min-height: 100vh;
+    background: url("./assets/greenBar.svg") no-repeat center/cover;
+}
+
+
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 20px;
+    width: 100%;
+    color: white;
+}
+
+.header h4 {
+
+    font-weight: 400;
+    letter-spacing: 1px;
+    font-family: "Roboto";
+}
+
+hr {
+    border: none;
+    border: 1px solid whitesmoke;
+    width: 100%;
+    opacity: 0.5;
+    margin-top: -20px;
+}
+
+.commandsSection {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+}

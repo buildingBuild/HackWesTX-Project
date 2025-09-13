@@ -4,9 +4,11 @@ import App from './App.jsx'
 import Homepage from './Homepage.jsx'
 import Joinroom from './Joinroom.jsx'
 import HostPage from './HostPage.jsx'
+import StudentPage from './StudentPage.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <HostPage></HostPage>
+   
+<StudentPage></StudentPage>
   </StrictMode>,
 )

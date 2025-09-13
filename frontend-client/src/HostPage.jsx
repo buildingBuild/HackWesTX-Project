@@ -25,6 +25,8 @@ return(
 <button>Launch Poll Stream</button>
 <button>Launch Reaction Stream</button>
 <button>Launch Question Stream</button>
+<button>Launch Rating Stream</button>
+<button>END CLASS</button>
 </div>
 
 <footer>
