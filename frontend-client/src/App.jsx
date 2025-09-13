@@ -6,7 +6,10 @@ import './App.css'
 function App() {
   //lets do homepage, joinRoomn, professor view, general student view
 const [page, setpage] = useState("home-createRoom")
-
+/*
+ <button onClick={() => setpage("HOME?")}></button>
+    <button onClick={() => setpage("ABOUT US")}></button>
+    */
 
   return (
     <>
