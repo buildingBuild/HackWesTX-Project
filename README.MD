@@ -11,8 +11,7 @@ _Coming soon_
 <li> Anonymous question queue with upvoting to surface the most important questions </li>  
 <li> Live engagement dashboard (active users, reaction spikes, confusion heatmap) </li>  
 <li> Timeline highlights & bookmarks tied to lecture moments </li>  
-<li> Automatic AI summary + engagement report emailed to the professor after class </li>  
-<li> Exportable reports (PDF/CSV) and optional LMS gradebook attendance sync </li>  
+<li> Automatic AI summary + engagement report emailed to the professor after class  Exportable reports (PDF) </li>
 <li> Works on phone, tablet, and laptop with a non-intrusive UI </li>
 
 ## Tech stack
@@ -22,6 +21,10 @@ _Coming soon_
 <li> Socket.IO (real-time reactions & question feed) </<li>  Gemini APi</li>
 <li> MongoDB (sessions, questions, highlights) </li>  
 <li> Nodemailer (emailing summaries) </li>
+
+## Problem it solves
+
+<li>Reduces the overwhelming number of post-lecture emails professors receive</li> <li>Encourages participation from students who struggle with social anxiety or shyness</li> <li>Provides a safe channel for students to share anonymous feedback with the professor</li> <li>Streamlines communication by consolidating questions and feedback in one platform</li> <li>Ensures no student question or concern is overlooked, even in large classes</li>
 
 ## Screenshots
 
