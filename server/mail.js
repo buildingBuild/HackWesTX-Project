@@ -3,9 +3,9 @@ import nodemailer from 'nodemailer'
 
 
 let currentDate = new Date();
-export default async function sendMail_analytics(userName, userEmail, Responses) {
+async function sendMail_analytics(userName, userEmail, Responses) {
 
-    let userName = "Tamed"
+
     try {
         const transporter = nodemailer.createTransport(
             {
@@ -25,7 +25,7 @@ export default async function sendMail_analytics(userName, userEmail, Responses)
         let info = await transporter.sendMail({
             to: "solomonunwuchola@gmail.com" || userEmail,
             subject: "Lecture Feedback",
-            text: `Hey ${userName} here are your analytics for your lecture class today ${currentDate}`,
+            text: `Hey ${'tamed' || userName} here are your analytics for your lecture class today ${currentDate}`,
 
         })
         console.log("Sent", info.messageId)
@@ -42,5 +42,6 @@ export default async function sendMail_analytics(userName, userEmail, Responses)
 
 }
 
+export { sendMail_analytics }
 
 
