@@ -16,9 +16,29 @@ return (
 
 <div className="branding">
 <h1>LECTRA</h1>
-
-<h2>Where every lecture speaks back.</h2>
+<h2>The Live lecture where every lecture speaks back.</h2>
+<h3>Turn every lecture into a connected, engaging, and memorable sessions</h3>
 </div>
+
+<div className="input-area">
+<h4>ENTER YOUR NAME</h4>
+<input placeholder="Dr Senku Stone" id="name-id">
+</input>
+
+<h4>ENTER YOUR EMAIL ADDRESS</h4>
+<input id="email-id">
+</input>
+</div>
+
+<button>CREATE ROOM</button>
+<footer>
+    <hr/>
+    <div className="footer-contents">
+    <h5>© {new Date().getFullYear()} Lectra . All rights reserved. </h5>
+    <h5> Report an Issue</h5>
+    </div>
+
+</footer>
 </div>
 
 )
