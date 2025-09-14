@@ -3,7 +3,6 @@ const app = express()
 import http from 'http'
 import { Server } from "socket.io"
 import cors from 'cors'
-import { emit } from 'process'
 
 const rooms = {}
 function generateCode() {
@@ -60,12 +59,38 @@ io.on("connection", (socket) => {
             hostEmail: rooms[code].hostEmail
         })
     })
+    socket.on("question-stream:start", ({ userCode }, cb) => {
+        if (!rooms[userCode]) return cb?.({ ok: false, error: "Room not found" });
+        io.to(userCode).emit("question-stream:start", { message: "Ask Questions" });
+        cb?.({ ok: true });
+    });
 
-    socket.on("question-stream", ({ userCode }, cb) => {
-        socket.to(userCode).emit("questionstreaming", { message: "Ask Questions" })
+    socket.on("question-stream:stop", ({ userCode }, cb) => {
+        if (!rooms[userCode]) return cb?.({ ok: false, error: "Room not found" });
+        io.to(userCode).emit("question-stream:stop", { message: "Question stream ended" });
+        cb?.({ ok: true });
+    });
 
-        cb?.({ ok: true })
-    })
+    socket.on("reaction-stream:start", ({ userCode }, cb) => {
+        if (!rooms[userCode]) return cb?.({ ok: false, error: "Room not found" });
+        io.to(userCode).emit("reaction-stream:start", { message: "Reactions open" });
+        cb?.({ ok: true });
+    });
+
+    socket.on("reaction-stream:stop", ({ userCode }, cb) => {
+        if (!rooms[userCode]) return cb?.({ ok: false, error: "Room not found" });
+        io.to(userCode).emit("reaction-stream:stop", { message: "Reactions closed" });
+        cb?.({ ok: true });
+    });
+
+    socket.on("class:end", ({ userCode }, cb) => {
+        if (!rooms[userCode]) return cb?.({ ok: false, error: "Room not found" });
+        io.to(userCode).emit("question-stream:stop", { message: "Question stream ended" });
+        io.to(userCode).emit("reaction-stream:stop", { message: "Reactions closed" });
+        io.to(userCode).emit("class:ended", { message: "Class ended" });
+        cb?.({ ok: true });
+    });
+
 
     socket.on("end-class", (data, cb) => {
 
