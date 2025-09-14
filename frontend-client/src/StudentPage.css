@@ -39,6 +39,8 @@ hr {
     flex-direction: column;
     text-align: center;
     justify-content: center;
+    font-family: "Montserrat", sans-serif;
+        font-weight: 400;
 }
 
 .prompt-section {
