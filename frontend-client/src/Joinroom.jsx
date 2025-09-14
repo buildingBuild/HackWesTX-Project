@@ -5,26 +5,36 @@ import viteLogo from '/vite.svg'
 import { useEffect } from 'react'
 import io from 'socket.io-client'
 const socket = io.connect("http://localhost:3001")
-
-
+let hostName = ""
 
 function Joinroom(){
-
+const [showStudentView, setStudentView] = useState(false)
 
    const joinlecture = () => {
 
-let roomNumber = ""
+let code = ""
 console.log("HELLO")
 const inputs = document.querySelectorAll(".code-container input")
 
 inputs.forEach((input) =>{
 
-   roomNumber += input.value
+   code += input.value
 })
 
-console.log(roomNumber)
+console.log(code)
 
-socket.emit("join-room", room)
+socket.emit("join-room", { code }, (res) => {
+    document.getElementById("possible-error").textContent = ""
+    if (res.ok) {
+      console.log("Joined room successfully:", code)
+      hostName = res.hostName
+      setStudentView(!showStudentView)
+    } else {
+      console.error("Failed to join room:", res.error)
+      document.getElementById("possible-error").textContent = res.error
+
+    }
+  })
 }
 
     return(
@@ -43,6 +53,7 @@ socket.emit("join-room", room)
 </div>
 <div className="forTheVibes">
 <h3>JOIN LECTURE ROOM</h3>
+<h2 id="possible-error" style={{textAlign: 'center', fontFamily: 'sans-serif',fontSize: '1em', color: 'red'}}></h2>
 </div>
 <div className="code-container">
     <input maxLength={1}></input>

@@ -28,26 +28,35 @@ io.on("connection", (socket) => {
     socket.on("send_message", (data) => {
         socket.broadcast.emit("rec", data)
     })
-
-    socket.on("send_message", (data) => {
-        socket.broadcast.emit("rec", data)
-    })
-
-    socket.on("join-room", ({ code }, cb => {
+    socket.on("join-room", ({ code }, cb) => {
         if (!rooms[code]) {
             cb?.({ ok: false, error: "Room not found" })
-            return;
+            return
         }
-        rooms[code].members.push(socket.id);
+        rooms[code].members.push(socket.id)
         socket.join(code)
-    }))
-
-    socket.on("create-room", (room) => {
-        const code = generateCode()
-        socket.join(code)
-        console.log(`Room ${code} created by ${socket.id}`)
-        cb?.({ code, hostId: socket.id })
+        cb?.({ ok: true })
     })
+
+    socket.on("create-room", (data, cb) => {
+        const code = generateCode()
+        rooms[code] =
+        {
+            hostId: socket.id,
+            members: [socket.id],
+            hostName: data.ownerName,
+            hostEmail: data.ownerEmail
+
+
+        }
+        socket.join(code)
+        cb?.({
+            ok: true,
+            hostName: rooms[code].hostName,
+            hostEmail: rooms[code].hostEmail
+        })
+    })
+
 
 })
 
