@@ -10,9 +10,27 @@ function Homepage(){
 
 
    const createRoom = () => {
-socket.emit("create-room", res =>{
-    setCode
-})
+const roomOwnerName = document.getElementById("name-id").value
+const roomOwnerEmail = document.getElementById("email-id").value
+
+console.log(roomOwnerName)
+console.log(roomOwnerEmail)
+
+let data = {
+    ownerName : roomOwnerName,
+    ownerEmail : roomOwnerEmail
+}
+
+socket.emit("create-room", data, (res) => {
+    if (res?.ok) {
+      console.log("Room created:", res.code, "Host:", res.hostId)
+    } else {
+      console.error(res?.error || "Unknown error creating room")
+    }
+  })
+
+
+
    }
 
 return (
