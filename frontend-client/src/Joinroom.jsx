@@ -41,7 +41,7 @@ socket.emit("join-room", { code }, (res) => {
     return(
 <div className="flex-container">
     {showStudentView ? (
-      <StudentPage/>
+      <StudentPage hostName={hostName}/>
     ) : (
       <>
         <div className="header">

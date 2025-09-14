@@ -4,6 +4,7 @@ import io from 'socket.io-client'
 const socket = io.connect("http://localhost:3001")
 
 function HostPage({userCode}){
+    console.log(userCode)
 
       const ack = (res) => {
     if (!res?.ok) console.error(res?.error || "unknown error")
@@ -17,7 +18,7 @@ function HostPage({userCode}){
     socket.emit("question-stream:stop", { userCode }, ack)
   }
 
-  // reaction stream no pun  intened
+
   const startReactionStream = () => {
     socket.emit("reaction-stream:start", { userCode }, ack)
   }
@@ -25,7 +26,7 @@ function HostPage({userCode}){
     socket.emit("reaction-stream:stop", { userCode }, ack)
   }
 
-  // END CLASS
+  
   const endClass = () => {
     socket.emit("class:end", { userCode }, ack)
   }
@@ -51,15 +52,24 @@ return(
 <h2>Host Control Panel</h2>
 </div>
 <div className="commandsSection">
-<div>
-<button onClick={startQuestionStream}> Launch Question Stream</button>
-<button onClick={startQuestionStream}> End Question Stream</button>
-</div>
-<div>
-<button onClick={startReactionStream}>Launch Reaction Stream</button>
-<button onClick={startReactionStream}>Launch Reaction Stream</button>
-</div>
-<button  onClick={endClass}>End Room</button>
+
+<button onClick={startQuestionStream}>
+  Launch Question Stream
+</button>
+<button onClick={stopQuestionStream}>
+  End Question Stream
+</button>
+
+<button onClick={startReactionStream}>
+  Launch Reaction Stream
+</button>
+<button onClick={stopReactionStream}>
+  End Reaction Stream
+</button>
+
+<button onClick={endClass}>
+  End Room
+</button>
 </div>
 
 <footer>

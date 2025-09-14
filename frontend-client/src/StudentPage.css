@@ -40,3 +40,18 @@ hr {
     text-align: center;
     justify-content: center;
 }
+
+.prompt-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.prompt-section input{
+
+    width: 350px;
+    height: 30px;
+    border-radius: 10px;
+
+}

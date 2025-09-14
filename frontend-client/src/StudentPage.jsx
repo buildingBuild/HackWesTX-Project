@@ -2,15 +2,20 @@ import './StudentPage.css'
 import './HostPage.css'
 import { useState } from 'react'
 import { useEffect } from 'react'
-const socket = io.connect("http://localhost:3001")
-function StudentPage(){
-
+import {io} from 'socket.io-client'
+const socket = io("http://localhost:3001")
+function StudentPage(prop){
+const  sendRes = () => {
+  
+  
+ 
+}
     useEffect(() =>{
-       const onQStart = (d) => alert(d.message);
-    const onQStop  = (d) => alert(d.message);
-    const onRStart = (d) => alert(d.message);
-    const onRStop  = (d) => alert(d.message);
-    const onEnded  = (d) => alert(d.message);
+    const onQStart = (d) => document.getElementById("prompt-message").textContent = d.message
+    const onQStop  = (d) => document.getElementById("prompt-message").textContent = d.message
+    const onRStart = (d) => document.getElementById("prompt-message").textContent = d.message
+    const onRStop  = (d) => document.getElementById("prompt-message").textContent = d.message
+    const onEnded  = (d) => document.getElementById("prompt-message").textContent = d.message
 
     socket.on("question-stream:start", onQStart);
     socket.on("question-stream:stop",  onQStop);
@@ -42,12 +47,12 @@ return(
 </div>
 
 
-<h1>Dr Stones Room</h1>
+<h1>{prop.hostName}'s Room</h1>
 <div className="commandsSection">
 <div className="prompt-section">
-<h1>How do you feel about that ? </h1>
-
-<button className="action-button">Launch Poll Stream</button>
+<h3 id="prompt-message">How do you feel about that ? </h3>
+<input></input>
+<button className="action-button" onClick={sendRes}>Submit</button>
 </div>
 
 </div>

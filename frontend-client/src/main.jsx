@@ -8,7 +8,7 @@ import StudentPage from './StudentPage.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-<HostPage></HostPage>
+    <StudentPage></StudentPage>
     <Homepage></Homepage>
 
 
