@@ -3,6 +3,7 @@ const app = express()
 import http from 'http'
 import { Server } from "socket.io"
 import cors from 'cors'
+import { emit } from 'process'
 
 const rooms = {}
 function generateCode() {
@@ -58,6 +59,18 @@ io.on("connection", (socket) => {
             hostName: rooms[code].hostName,
             hostEmail: rooms[code].hostEmail
         })
+    })
+
+    socket.on("question-stream", ({ userCode }, cb) => {
+        socket.to(userCode).emit("questionstreaming", { message: "Ask Questions" })
+
+        cb?.({ ok: true })
+    })
+
+    socket.on("end-class", (data, cb) => {
+
+
+
     })
 
 
