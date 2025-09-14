@@ -1,6 +1,35 @@
 import './JoinRoom.css'
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import { useEffect } from 'react'
+import io from 'socket.io-client'
+const socket = io.connect("http://localhost:3001")
+
+
+
 function Joinroom(){
 
+
+   const joinlecture = () => {
+
+let roomNumber = ""
+console.log("HELLO")
+const inputs = document.querySelectorAll(".code-container input")
+
+inputs.forEach((input) =>{
+
+
+   roomNumber += input.value
+})
+
+console.log(roomNumber)
+
+return
+
+
+socket.emit("join-room", room)
+}
 
     return(
 <div className="flex-container">
@@ -21,11 +50,11 @@ function Joinroom(){
 </div>
 <div className="code-container">
     <input maxLength={1}></input>
-    <input maxLength={0}></input>
     <input maxLength={1}></input>
-    <input maxLength={0}></input>
+    <input maxLength={1}></input>
+    <input maxLength={1}></input>
 </div>
-<button>JOIN </button>
+<button onClick={joinlecture}> JOIN </button>
 
 
 
