@@ -40,7 +40,14 @@ io.on("connection", (socket) => {
         socket.join(code)
         console.log(`Socket ${socket.id} joined room ${code}`)
         console.log(`Room ${code} now has ${rooms[code].members.length} members`)
-        cb?.({ ok: true })
+
+        // FIXED: Return hostName in the response
+        cb?.({
+            ok: true,
+            hostName: rooms[code].hostName,
+            roomCode: code,
+            memberCount: rooms[code].members.length
+        })
     })
 
     socket.on("create-room", (data, cb) => {
@@ -111,7 +118,12 @@ io.on("connection", (socket) => {
 
     // Handle student responses
     socket.on("student-response", ({ roomCode, response, studentId }) => {
-        if (!rooms[roomCode]) return;
+        if (!rooms[roomCode]) {
+            console.log(`Room ${roomCode} not found for student response`);
+            return;
+        }
+
+        console.log(`Student response from ${studentId} in room ${roomCode}: ${response}`);
 
         // Send response to the host
         socket.to(rooms[roomCode].hostId).emit("student-response", {
@@ -121,16 +133,15 @@ io.on("connection", (socket) => {
         });
     });
 
-
     socket.on("disconnect", () => {
         console.log(`User disconnected ${socket.id}`);
-
 
         Object.keys(rooms).forEach(code => {
             const room = rooms[code];
             room.members = room.members.filter(id => id !== socket.id);
 
             if (room.hostId === socket.id) {
+                console.log(`Host ${socket.id} disconnected from room ${code}, ending class`);
                 io.to(code).emit("class:ended", { message: "Host disconnected - Class ended" });
                 delete rooms[code];
             }
