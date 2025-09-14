@@ -26,8 +26,8 @@ io.on("connection", (socket) => {
 
 
     socket.on("send_message", (data) => {
-
-        socket.broadcast.emit("rec", data)
+        if (!rooms[code]) return;
+        socket.to(code).emit("rec", { message, from, code });
     })
     socket.on("join-room", ({ code }, cb) => {
         if (!rooms[code]) {
