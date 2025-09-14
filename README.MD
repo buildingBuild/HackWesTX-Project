@@ -1,14 +1,15 @@
 <h2 align="center"> Live Lecture </h2>  
 An interactive, real-time classroom tool where students react with emojis/quick signals, ask questions without interrupting, and bookmark key moments—while professors see live engagement and receive an automatic post-class summary by email.
 
-## 🌐 Live Site
+## 🌐 Live Site / HOW TO RUN
 
-_Coming soon_
+To run locally open the folder find your way to the frontend-client and run npm install, then npm run dev. Do the same for server run npm install then npm run dev. To test users should use different browsers acting as clients due to the fact that dev mode can make your one browser only loced to yours
 
 ## Features
 
-<li> Real-time emoji reactions (👍 👎 😕 🤯) and quick signals (“I get it”, “Repeat”, “Too fast”) </li>  
-<li> Anonymous question queue with upvoting to surface the most important questions </li>  
+<li> Web socket connection for real-time feedback between the professor and student </li>  
+<li> Real-time emoji reactions (👍 👎 😕 🤯) </li>  
+<li> Anonymous live question queue  </li>  
 <li> Live command dashboard for professors (active users, reaction spikes based on percentage calculation, confusion heatmap) </li>  
 <li> Timeline highlights & bookmarks tied to lecture moments </li>  
 <li> AI sentiment analysis to remove bad messages</li>
@@ -21,7 +22,6 @@ _Coming soon_
 <li> Node.js / Express </li>  
 <li> Socket.IO (real-time reactions & question feed) </li>
 <li>  Gemini APi</li>
-<li> MongoDB (sessions, questions, highlights) </li>  
 <li> Nodemailer (emailing summaries) </li>
 
 ## Problem it solves

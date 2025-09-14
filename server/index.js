@@ -41,7 +41,6 @@ io.on("connection", (socket) => {
         console.log(`Socket ${socket.id} joined room ${code}`)
         console.log(`Room ${code} now has ${rooms[code].members.length} members`)
 
-        // FIXED: Return hostName in the response
         cb?.({
             ok: true,
             hostName: rooms[code].hostName,
@@ -56,7 +55,8 @@ io.on("connection", (socket) => {
             hostId: socket.id,
             members: [socket.id],
             hostName: data.ownerName,
-            hostEmail: data.ownerEmail
+            hostEmail: data.ownerEmail,
+            questions: [] // Add questions array to store student responses
         }
         socket.join(code)
         console.log(`Room ${code} created by ${socket.id}`)
@@ -75,7 +75,8 @@ io.on("connection", (socket) => {
         console.log(`Starting question stream for room ${userCode}`)
         console.log(`Broadcasting to ${rooms[userCode].members.length} members`)
 
-        socket.to(userCode).emit("question-stream:start", { message: "Ask Questions" });
+        // FIXED: Use io.to() to broadcast to ALL room members (including sender)
+        io.to(userCode).emit("question-stream:start", { message: "Ask Questions" });
         cb?.({ ok: true });
     });
 
@@ -83,7 +84,8 @@ io.on("connection", (socket) => {
         if (!rooms[userCode]) return cb?.({ ok: false, error: "Room not found" });
 
         console.log(`Stopping question stream for room ${userCode}`)
-        socket.to(userCode).emit("question-stream:stop", { message: "Question stream ended" });
+        // FIXED: Use io.to() to broadcast to ALL room members
+        io.to(userCode).emit("question-stream:stop", { message: "Question stream ended" });
         cb?.({ ok: true });
     });
 
@@ -91,7 +93,8 @@ io.on("connection", (socket) => {
         if (!rooms[userCode]) return cb?.({ ok: false, error: "Room not found" });
 
         console.log(`Starting reaction stream for room ${userCode}`)
-        socket.to(userCode).emit("reaction-stream:start", { message: "Reactions open" });
+        // FIXED: Use io.to() to broadcast to ALL room members
+        io.to(userCode).emit("reaction-stream:start", { message: "Share your reactions" });
         cb?.({ ok: true });
     });
 
@@ -99,7 +102,8 @@ io.on("connection", (socket) => {
         if (!rooms[userCode]) return cb?.({ ok: false, error: "Room not found" });
 
         console.log(`Stopping reaction stream for room ${userCode}`)
-        socket.to(userCode).emit("reaction-stream:stop", { message: "Reactions closed" });
+        // FIXED: Use io.to() to broadcast to ALL room members
+        io.to(userCode).emit("reaction-stream:stop", { message: "Reactions closed" });
         cb?.({ ok: true });
     });
 
@@ -116,7 +120,7 @@ io.on("connection", (socket) => {
         cb?.({ ok: true });
     });
 
-    // Handle student responses
+    // ENHANCED: Handle student responses/questions
     socket.on("student-response", ({ roomCode, response, studentId }) => {
         if (!rooms[roomCode]) {
             console.log(`Room ${roomCode} not found for student response`);
@@ -125,12 +129,55 @@ io.on("connection", (socket) => {
 
         console.log(`Student response from ${studentId} in room ${roomCode}: ${response}`);
 
-        // Send response to the host
+        // Store the question in the room
+        const question = {
+            id: Date.now(),
+            studentId: studentId,
+            response: response,
+            timestamp: new Date().toLocaleTimeString()
+        };
+
+        if (!rooms[roomCode].questions) {
+            rooms[roomCode].questions = [];
+        }
+        rooms[roomCode].questions.push(question);
+
+        // Send to host only (not all room members)
         socket.to(rooms[roomCode].hostId).emit("student-response", {
             response,
             studentId,
-            roomCode
+            roomCode,
+            timestamp: question.timestamp,
+            questionId: question.id
         });
+
+        // Also send to the student who submitted (confirmation)
+        socket.emit("response-submitted", {
+            message: "Your response has been submitted!",
+            timestamp: question.timestamp
+        });
+    });
+
+    // NEW: Get all questions for host
+    socket.on("get-questions", ({ roomCode }, cb) => {
+        if (!rooms[roomCode]) {
+            return cb?.({ ok: false, error: "Room not found" });
+        }
+
+        cb?.({
+            ok: true,
+            questions: rooms[roomCode].questions || []
+        });
+    });
+
+    // NEW: Clear all questions
+    socket.on("clear-questions", ({ roomCode }, cb) => {
+        if (!rooms[roomCode]) {
+            return cb?.({ ok: false, error: "Room not found" });
+        }
+
+        rooms[roomCode].questions = [];
+        cb?.({ ok: true });
     });
 
     socket.on("disconnect", () => {

@@ -57,3 +57,125 @@ hr {
     border-radius: 10px;
 
 }
+
+/* Add these styles to your StudentPage.css */
+
+.questions-display {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    border: 2px solid #007bff;
+}
+
+.questions-scroll-container {
+    max-height: 300px;
+    overflow-y: auto;
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    /* Custom scrollbar styling */
+    scrollbar-width: thin;
+    scrollbar-color: #007bff #f1f1f1;
+}
+
+/* Webkit scrollbar styling for Chrome, Safari */
+.questions-scroll-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.questions-scroll-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.questions-scroll-container::-webkit-scrollbar-thumb {
+    background: #007bff;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+.questions-scroll-container::-webkit-scrollbar-thumb:hover {
+    background: #0056b3;
+}
+
+.question-item {
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    background-color: #ffffff;
+    border-left: 4px solid #007bff;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    animation: slideIn 0.3s ease-out;
+}
+
+.question-item:hover {
+    transform: translateX(3px);
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.15);
+}
+
+.question-item:last-child {
+    margin-bottom: 0;
+}
+
+.question-content p {
+    margin: 0 0 8px 0;
+    color: #333;
+    font-size: 15px;
+    line-height: 1.4;
+    word-wrap: break-word;
+}
+
+.question-timestamp {
+    color: #666;
+    font-size: 12px;
+    float: right;
+    font-weight: 500;
+}
+
+/* Animation for new questions */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .questions-display {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .questions-scroll-container {
+        max-height: 250px;
+        padding: 12px;
+    }
+
+    .question-item {
+        padding: 10px 12px;
+    }
+
+    .question-content p {
+        font-size: 14px;
+    }
+}
+
+.commandsSection .prompt-section {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.questions-scroll-container.auto-scroll {
+    scroll-behavior: smooth;
+}
