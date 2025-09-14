@@ -3,6 +3,17 @@ const app = express()
 import http from 'http'
 import { Server } from "socket.io"
 import cors from 'cors'
+import nodemailer from 'nodemailer'
+import { GoogleGenerativeAI } from "@google/generative-ai";
+const genAI = new GoogleGenerativeAI(process.env.AI_API_KEY);
+
+let amountOfPeople = 0;
+let amountOfJoins = 0;
+let RoomOwner = "";
+let RoomOwnerEmail = "";
+let aiResponse = "";
+
+
 
 const rooms = {}
 function generateCode() {
@@ -28,6 +39,7 @@ io.on("connection", (socket) => {
     })
 
     socket.on("join-room", ({ code }, cb) => {
+        ++amountOfJoins
         if (!rooms[code]) {
             cb?.({ ok: false, error: "Room not found" })
             return
@@ -38,6 +50,7 @@ io.on("connection", (socket) => {
         }
 
         socket.join(code)
+        ++amountOfJoins
         console.log(`Socket ${socket.id} joined room ${code}`)
         console.log(`Room ${code} now has ${rooms[code].members.length} members`)
 
@@ -51,6 +64,9 @@ io.on("connection", (socket) => {
 
     socket.on("create-room", (data, cb) => {
         const code = generateCode()
+        RoomOwner = data.ownerName;
+        RoomOwnerEmail = data.ownerEmail
+
         rooms[code] = {
             hostId: socket.id,
             members: [socket.id],
@@ -129,7 +145,7 @@ io.on("connection", (socket) => {
 
         console.log(`Student response from ${studentId} in room ${roomCode}: ${response}`);
 
-        // Store the question in the room
+        // This part just did not work 
         const question = {
             id: Date.now(),
             studentId: studentId,
@@ -170,7 +186,6 @@ io.on("connection", (socket) => {
         });
     });
 
-    // NEW: Clear all questions
     socket.on("clear-questions", ({ roomCode }, cb) => {
         if (!rooms[roomCode]) {
             return cb?.({ ok: false, error: "Room not found" });
@@ -188,6 +203,52 @@ io.on("connection", (socket) => {
             room.members = room.members.filter(id => id !== socket.id);
 
             if (room.hostId === socket.id) {
+
+                let currentDate = new Date();
+
+                async function main() {
+
+                    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }); // pick a valid model
+                    const result = await model.generateContent(
+                        `You are giving a lecturer/professor analytics as email... amountOfPeople ${amountOfPeople} amountOfJoins ${amountOfJoins} Professor Name ${RoomOwner}`
+                    );
+                    const aiText = result.response.text();
+                }
+                async function sendMail_analytics() {
+                    try {
+                        const transporter = nodemailer.createTransport(
+                            {
+
+                                secure: true,
+                                host: 'smtp.gmail.com',
+                                port: 465,
+                                auth: {
+                                    user: 'analytics.livelecture@gmail.com',
+                                    pass: 'dzrh zugu nkip hsjz'
+                                }
+
+                            }
+                        );
+                        await transporter.verify();
+
+                        let info = await transporter.sendMail({
+                            to: `${RoomOwnerEmail}`,
+                            subject: "Lecture Feedback",
+                            text: `Hey ${'tamed' || userName} here are your analytics for your lecture class today ${currentDate}  ${aiResponse}`,
+
+                        })
+                        console.log("Sent", info.messageId)
+
+                    }
+                    catch (err) {
+                        console.error(err)
+                    }
+                }
+                main();
+                sendMail_analytics()
+
+
+
                 console.log(`Host ${socket.id} disconnected from room ${code}, ending class`);
                 io.to(code).emit("class:ended", { message: "Host disconnected - Class ended" });
                 delete rooms[code];
@@ -200,8 +261,7 @@ server.listen(3001, () => {
     console.log("Server is running on port 3001")
 })
 
-/*
-import { sendMail_analytics } from './mail.js' // takes 3 parameters btw
 
-sendMail_analytics("tamed", "tamed", "tamed")
-*/
+
+
+
