@@ -1,7 +1,9 @@
 import './StudentPage.css'
 import './HostPage.css'
+import { useState } from 'react'
+import { useEffect } from 'react'
 function StudentPage(){
-
+useEffect
 return(
     <div className="flex-container">
     <div className="header">

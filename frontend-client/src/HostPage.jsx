@@ -1,21 +1,51 @@
 import './JoinRoom.css'
 import './HostPage.css'
-
+import io from 'socket.io-client'
+const socket = io.connect("http://localhost:3001")
 
 function HostPage({userCode}){
 
 const launchQuestionStream = () =>{
-
+socket.emit("question-stream", { userCode }, (res) => {
+    if (res.ok) {
+    
+    } 
+    else {
+      console.error("Failed to join room:", res.error)
+      document.getElementById("possible-error").textContent = res.error
+    }
+  })
 
 }
 
-const ReactionStream = () =>{
 
+const ReactionStream = () =>{
+socket.emit("reaction-stream", { userCode }, (res) => {
+    document.getElementById("possible-error").textContent = ""
+    if (res.ok) {
+      console.log("Joined room successfully:", code)
+      hostName = res.hostName
+      setStudentView(true) 
+    } else {
+      console.error("Failed to join room:", res.error)
+      document.getElementById("possible-error").textContent = res.error
+
+    }
+  })
     
 }
 
 const endClass = () =>{
+socket.emit("end-class", { userCode }, (res) => {
+    if (res.ok) {
+     
+    } 
+    else 
+    {
+      
 
+    }
+  })
     
 }
 
