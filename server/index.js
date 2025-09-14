@@ -9,48 +9,50 @@ function generateCode() {
     return Math.floor(1000 + Math.random() * 9000).toString()
 }
 
-const server = http.createServer(app)  // let express handle it
-
+const server = http.createServer(app)
 
 const io = new Server(server, {
     cors: {
         origin: "http://localhost:5173",
         methods: ["GET", "POST"]
     }
-
 })
 
 io.on("connection", (socket) => {
-
-    console.log(`User connected ${socket.id}`) // very unique 
-
+    console.log(`User connected ${socket.id}`)
 
     socket.on("send_message", (data) => {
+        const { message, from, code } = data;
         if (!rooms[code]) return;
         socket.to(code).emit("rec", { message, from, code });
     })
+
     socket.on("join-room", ({ code }, cb) => {
         if (!rooms[code]) {
             cb?.({ ok: false, error: "Room not found" })
             return
         }
-        rooms[code].members.push(socket.id)
+
+        if (!rooms[code].members.includes(socket.id)) {
+            rooms[code].members.push(socket.id)
+        }
+
         socket.join(code)
+        console.log(`Socket ${socket.id} joined room ${code}`)
+        console.log(`Room ${code} now has ${rooms[code].members.length} members`)
         cb?.({ ok: true })
     })
 
     socket.on("create-room", (data, cb) => {
         const code = generateCode()
-        rooms[code] =
-        {
+        rooms[code] = {
             hostId: socket.id,
             members: [socket.id],
             hostName: data.ownerName,
             hostEmail: data.ownerEmail
-
-
         }
         socket.join(code)
+        console.log(`Room ${code} created by ${socket.id}`)
         cb?.({
             ok: true,
             code,
@@ -59,50 +61,85 @@ io.on("connection", (socket) => {
             hostEmail: rooms[code].hostEmail
         })
     })
+
     socket.on("question-stream:start", ({ userCode }, cb) => {
         if (!rooms[userCode]) return cb?.({ ok: false, error: "Room not found" });
-        io.to(userCode).emit("question-stream:start", { message: "Ask Questions" });
+
+        console.log(`Starting question stream for room ${userCode}`)
+        console.log(`Broadcasting to ${rooms[userCode].members.length} members`)
+
+        socket.to(userCode).emit("question-stream:start", { message: "Ask Questions" });
         cb?.({ ok: true });
     });
 
     socket.on("question-stream:stop", ({ userCode }, cb) => {
         if (!rooms[userCode]) return cb?.({ ok: false, error: "Room not found" });
-        io.to(userCode).emit("question-stream:stop", { message: "Question stream ended" });
+
+        console.log(`Stopping question stream for room ${userCode}`)
+        socket.to(userCode).emit("question-stream:stop", { message: "Question stream ended" });
         cb?.({ ok: true });
     });
 
     socket.on("reaction-stream:start", ({ userCode }, cb) => {
         if (!rooms[userCode]) return cb?.({ ok: false, error: "Room not found" });
-        io.to(userCode).emit("reaction-stream:start", { message: "Reactions open" });
+
+        console.log(`Starting reaction stream for room ${userCode}`)
+        socket.to(userCode).emit("reaction-stream:start", { message: "Reactions open" });
         cb?.({ ok: true });
     });
 
     socket.on("reaction-stream:stop", ({ userCode }, cb) => {
         if (!rooms[userCode]) return cb?.({ ok: false, error: "Room not found" });
-        io.to(userCode).emit("reaction-stream:stop", { message: "Reactions closed" });
+
+        console.log(`Stopping reaction stream for room ${userCode}`)
+        socket.to(userCode).emit("reaction-stream:stop", { message: "Reactions closed" });
         cb?.({ ok: true });
     });
 
     socket.on("class:end", ({ userCode }, cb) => {
         if (!rooms[userCode]) return cb?.({ ok: false, error: "Room not found" });
+
+        console.log(`Ending class for room ${userCode}`)
         io.to(userCode).emit("question-stream:stop", { message: "Question stream ended" });
         io.to(userCode).emit("reaction-stream:stop", { message: "Reactions closed" });
         io.to(userCode).emit("class:ended", { message: "Class ended" });
+
+        // Clean up the room
+        delete rooms[userCode];
         cb?.({ ok: true });
     });
 
+    // Handle student responses
+    socket.on("student-response", ({ roomCode, response, studentId }) => {
+        if (!rooms[roomCode]) return;
 
-    socket.on("end-class", (data, cb) => {
+        // Send response to the host
+        socket.to(rooms[roomCode].hostId).emit("student-response", {
+            response,
+            studentId,
+            roomCode
+        });
+    });
 
 
+    socket.on("disconnect", () => {
+        console.log(`User disconnected ${socket.id}`);
 
-    })
 
+        Object.keys(rooms).forEach(code => {
+            const room = rooms[code];
+            room.members = room.members.filter(id => id !== socket.id);
 
+            if (room.hostId === socket.id) {
+                io.to(code).emit("class:ended", { message: "Host disconnected - Class ended" });
+                delete rooms[code];
+            }
+        });
+    });
 })
 
 server.listen(3001, () => {
-    console.log("Server is running")
+    console.log("Server is running on port 3001")
 })
 
 /*
