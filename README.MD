@@ -1,9 +1,9 @@
 <h2 align="center"> Live Lecture </h2>  
 An interactive, real-time classroom tool where students react with emojis/quick signals, ask questions without interrupting, and bookmark key moments—while professors see live engagement and receive an automatic post-class summary by email.
 
-## 🌐 Live Site / HOW TO RUN
+## OW TO RUN
 
-To run locally open the folder find your way to the frontend-client and run npm install, then npm run dev. Do the same for server run npm install then npm run dev. To test users should use different browsers acting as clients due to the fact that dev mode can make your one browser only loced to yours
+To run locally open the folder find your way to the frontend-client and run npm install, then npm run dev. Do the same for server run npm install then npm run dev. To test users should use different browsers acting as clients due to the fact that dev mode can make your one browser only loced to yours. Make sure you running both at the same time. Also use your own gemeni api key lol
 
 ## Features
 
