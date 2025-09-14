@@ -26,6 +26,7 @@ io.on("connection", (socket) => {
 
 
     socket.on("send_message", (data) => {
+
         socket.broadcast.emit("rec", data)
     })
     socket.on("join-room", ({ code }, cb) => {
