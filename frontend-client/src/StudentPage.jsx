@@ -2,8 +2,30 @@ import './StudentPage.css'
 import './HostPage.css'
 import { useState } from 'react'
 import { useEffect } from 'react'
+const socket = io.connect("http://localhost:3001")
 function StudentPage(){
-useEffect
+
+    useEffect(() =>{
+       const onQStart = (d) => alert(d.message);
+    const onQStop  = (d) => alert(d.message);
+    const onRStart = (d) => alert(d.message);
+    const onRStop  = (d) => alert(d.message);
+    const onEnded  = (d) => alert(d.message);
+
+    socket.on("question-stream:start", onQStart);
+    socket.on("question-stream:stop",  onQStop);
+    socket.on("reaction-stream:start", onRStart);
+    socket.on("reaction-stream:stop",  onRStop);
+    socket.on("class:ended",          onEnded);
+
+  return () => {
+      socket.off("question-stream:start", onQStart);
+      socket.off("question-stream:stop",  onQStop);
+      socket.off("reaction-stream:start", onRStart);
+      socket.off("reaction-stream:stop",  onRStop);
+      socket.off("class:ended",           onEnded);
+    };
+},[socket])
 return(
     <div className="flex-container">
     <div className="header">

@@ -5,49 +5,31 @@ const socket = io.connect("http://localhost:3001")
 
 function HostPage({userCode}){
 
-const launchQuestionStream = () =>{
-socket.emit("question-stream", { userCode }, (res) => {
-    if (res.ok) {
-    
-    } 
-    else {
-      console.error("Failed to join room:", res.error)
-      document.getElementById("possible-error").textContent = res.error
-    }
-  })
+      const ack = (res) => {
+    if (!res?.ok) console.error(res?.error || "unknown error")
+  }
 
-}
+  
+  const startQuestionStream = () => {
+    socket.emit("question-stream:start", { userCode }, ack)
+  }
+  const stopQuestionStream = () => {
+    socket.emit("question-stream:stop", { userCode }, ack)
+  }
 
+  // reaction stream no pun  intened
+  const startReactionStream = () => {
+    socket.emit("reaction-stream:start", { userCode }, ack)
+  }
+  const stopReactionStream = () => {
+    socket.emit("reaction-stream:stop", { userCode }, ack)
+  }
 
-const ReactionStream = () =>{
-socket.emit("reaction-stream", { userCode }, (res) => {
-    document.getElementById("possible-error").textContent = ""
-    if (res.ok) {
-      console.log("Joined room successfully:", code)
-      hostName = res.hostName
-      setStudentView(true) 
-    } else {
-      console.error("Failed to join room:", res.error)
-      document.getElementById("possible-error").textContent = res.error
+  // END CLASS
+  const endClass = () => {
+    socket.emit("class:end", { userCode }, ack)
+  }
 
-    }
-  })
-    
-}
-
-const endClass = () =>{
-socket.emit("end-class", { userCode }, (res) => {
-    if (res.ok) {
-     
-    } 
-    else 
-    {
-      
-
-    }
-  })
-    
-}
 
 
 return(
@@ -69,8 +51,14 @@ return(
 <h2>Host Control Panel</h2>
 </div>
 <div className="commandsSection">
-<button onClick={launchQuestionStream}> Launch Reaction Stream</button>
-<button onClick={ReactionStream}>Launch Question Stream</button>
+<div>
+<button onClick={startQuestionStream}> Launch Question Stream</button>
+<button onClick={startQuestionStream}> End Question Stream</button>
+</div>
+<div>
+<button onClick={startReactionStream}>Launch Reaction Stream</button>
+<button onClick={startReactionStream}>Launch Reaction Stream</button>
+</div>
 <button  onClick={endClass}>End Room</button>
 </div>
 
