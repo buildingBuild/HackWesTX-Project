@@ -1,34 +1,59 @@
 import express from 'express'
-const app = express();
+const app = express()
 import http from 'http'
-import { Server } from 'socket-io'
+import { Server } from "socket.io"
 import cors from 'cors'
 
+const rooms = {}
+function generateCode() {
+    return Math.floor(100000 + Math.random() * 900000).toString()
+}
 
-app.use(cors()) // so its just allows any connection from the time being
+const server = http.createServer(app)  // let express handle it
 
-const server = http.createServer(app)
 
 const io = new Server(server, {
-
+    cors: {
+        origin: "http://localhost:5173",
+        methods: ["GET", "POST"]
+    }
 
 })
 
 io.on("connection", (socket) => {
 
-    console.log(`User connected ${socket.id}`)
+    console.log(`User connected ${socket.id}`) // very unique 
 
-    socket.on("send_message", (data) => { // listening for client
-        socket.broadcast.emit("rec", data) // sending to all
+
+    socket.on("send_message", (data) => {
+        socket.broadcast.emit("rec", data)
+    })
+
+    socket.on("send_message", (data) => {
+        socket.broadcast.emit("rec", data)
+    })
+
+    socket.on("join-room", ({ code }, cb => {
+        if (!rooms[code]) {
+            cb?.({ ok: false, error: "Room not found" })
+            return;
+        }
+        rooms[code].members.push(socket.id);
+        socket.join(code)
+    }))
+
+    socket.on("create-room", (room) => {
+        const code = generateCode()
+        socket.join(code)
+        console.log(`Room ${code} created by ${socket.id}`)
+        cb?.({ code, hostId: socket.id })
     })
 
 })
 
-server.listen(3001, () => console.log("Server running on 3001"))
-
-
-
-
+server.listen(3001, () => {
+    console.log("Server is running")
+})
 
 /*
 import { sendMail_analytics } from './mail.js' // takes 3 parameters btw
