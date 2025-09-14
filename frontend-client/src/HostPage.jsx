@@ -4,6 +4,22 @@ import './HostPage.css'
 
 function HostPage({userCode}){
 
+const launchQuestionStream = () =>{
+
+
+}
+
+const ReactionStream = () =>{
+
+    
+}
+
+const endClass = () =>{
+
+    
+}
+
+
 return(
 <div className="flex-container">
     <div className="header">
@@ -15,17 +31,17 @@ return(
 
 <div className="branding">
 <h1>LECTRA</h1>
-<h2>The Live lecture where every lecture speaks back.</h2>
+
 <h3>Turn every lecture into a connected, engaging, and memorable sessions</h3>
 </div>
-
-<h1>Room Number:  {userCode}</h1>
-<h1>Host Control Panel</h1>
+<div className="relevant-info">
+<h2>Room Number:  {userCode}</h2>
+<h2>Host Control Panel</h2>
+</div>
 <div className="commandsSection">
-<button>Launch Reaction Stream</button>
-<button>Launch Question Stream</button>
-<button>Launch Rating Stream</button>
-<button>End Room</button>
+<button onClick={launchQuestionStream}> Launch Reaction Stream</button>
+<button onClick={ReactionStream}>Launch Question Stream</button>
+<button  onClick={endClass}>End Room</button>
 </div>
 
 <footer>

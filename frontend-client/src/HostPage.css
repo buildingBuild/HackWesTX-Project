@@ -26,6 +26,18 @@
     font-family: "Roboto";
 }
 
+.relevant-info{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+
+}
+.relevant-info h2{
+    font-family: "Montserrat", sans-serif;
+    font-weight: 400;
+
+}
+
 hr {
     border: none;
     border: 1px solid whitesmoke;
