@@ -31,6 +31,6 @@ To run locally open the folder find your way to the frontend-client and run npm 
 ## Screenshots
 
 <div>
-<img width="250" alt="Live reaction stream" src="https://via.placeholder.com/250?text=Live+Reactions" />  
-<img width="250" alt="Question queue" src="https://via.placeholder.com/250?text=Question+Queue" />  
+<img width="250" alt="Live reaction stream" src="img1.png" />  
+<img width="250" alt="Question queue" src="img2.png" />  
 </div>
