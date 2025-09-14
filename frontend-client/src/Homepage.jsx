@@ -1,14 +1,14 @@
 import './Homepage.css'
 import  {useState} from 'react'
 import HostPage from './HostPage'
+import Joinroom from './Joinroom'
 import io from 'socket.io-client'
 const socket = io.connect("http://localhost:3001")
 let userCode = ""
 
 function Homepage(){
-const [professorView,setProfessorView] = useState(false)
 const [roomCode,setRoomCode] = useState("")
-
+  const [page, setPage] = useState("home")
 
 
 
@@ -28,7 +28,7 @@ socket.emit("create-room", data, (res) => {
     if (res?.ok) {
       console.log("Room created:", res.code, "Host:", res.hostId)
     setRoomCode(res.code)
-      setProfessorView(true)
+      setPage("host")
     } else {
       console.error(res?.error || "Unknown error creating room")
     }
@@ -37,16 +37,14 @@ socket.emit("create-room", data, (res) => {
 
 
    }
-
+  if (page === "host") return <HostPage userCode={roomCode} />
+  if (page === "join") return <Joinroom />
 return (
 <div className="flex-container">
-    {professorView ? (
-      <HostPage userCode={roomCode} />
-    ) : (
-      <>
+    
         <div className="header">
           <h4>CREATE A ROOM</h4>
-          <h4>JOIN ROOM </h4>
+          <h4 onClick={() => setPage("join")}>JOIN ROOM </h4>
           <h4 style={{ marginLeft: 'auto' }}>ABOUT US</h4>
         </div>
         <hr/>
@@ -74,8 +72,8 @@ return (
             <h5> Report an Issue</h5>
           </div>
         </footer>
-      </>
-    )}
+      
+    
   </div>
 )
 
