@@ -9,16 +9,18 @@ _Coming soon_
 
 <li> Real-time emoji reactions (👍 👎 😕 🤯) and quick signals (“I get it”, “Repeat”, “Too fast”) </li>  
 <li> Anonymous question queue with upvoting to surface the most important questions </li>  
-<li> Live engagement dashboard (active users, reaction spikes, confusion heatmap) </li>  
+<li> Live command dashboard for professors (active users, reaction spikes based on percentage calculation, confusion heatmap) </li>  
 <li> Timeline highlights & bookmarks tied to lecture moments </li>  
-<li> Automatic AI summary + engagement report emailed to the professor after class  Exportable reports (PDF) </li>
+<li> AI sentiment analysis to remove bad messages</li>
+<li> Automatic AI summary + engagement report emailed to the professor after lecture room ends</li>
 <li> Works on phone, tablet, and laptop with a non-intrusive UI </li>
 
 ## Tech stack
 
 <li> React (Vite) </li>  
 <li> Node.js / Express </li>  
-<li> Socket.IO (real-time reactions & question feed) </<li>  Gemini APi</li>
+<li> Socket.IO (real-time reactions & question feed) </li>
+<li>  Gemini APi</li>
 <li> MongoDB (sessions, questions, highlights) </li>  
 <li> Nodemailer (emailing summaries) </li>
 
