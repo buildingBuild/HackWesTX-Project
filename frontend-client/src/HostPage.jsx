@@ -2,7 +2,7 @@ import './JoinRoom.css'
 import './HostPage.css'
 
 
-function HostPage(props){
+function HostPage({userCode}){
 
 return(
 <div className="flex-container">
@@ -19,7 +19,7 @@ return(
 <h3>Turn every lecture into a connected, engaging, and memorable sessions</h3>
 </div>
 
-<h1>Room Number:  {props.userCode}</h1>
+<h1>Room Number:  {userCode}</h1>
 <h1>Host Control Panel</h1>
 <div className="commandsSection">
 <button>Launch Reaction Stream</button>

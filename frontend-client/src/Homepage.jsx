@@ -7,6 +7,7 @@ let userCode = ""
 
 function Homepage(){
 const [professorView,setProfessorView] = useState(false)
+const [roomCode,setRoomCode] = useState("")
 
 
 
@@ -26,7 +27,7 @@ let data = {
 socket.emit("create-room", data, (res) => {
     if (res?.ok) {
       console.log("Room created:", res.code, "Host:", res.hostId)
-      userCode = res.code
+    setRoomCode(res.code)
       setProfessorView(true)
     } else {
       console.error(res?.error || "Unknown error creating room")
@@ -40,7 +41,7 @@ socket.emit("create-room", data, (res) => {
 return (
 <div className="flex-container">
     {professorView ? (
-      <HostPage roomNumber={userCode} />
+      <HostPage userCode={roomCode} />
     ) : (
       <>
         <div className="header">
