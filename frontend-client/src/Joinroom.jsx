@@ -19,14 +19,10 @@ const inputs = document.querySelectorAll(".code-container input")
 
 inputs.forEach((input) =>{
 
-
    roomNumber += input.value
 })
 
 console.log(roomNumber)
-
-return
-
 
 socket.emit("join-room", room)
 }

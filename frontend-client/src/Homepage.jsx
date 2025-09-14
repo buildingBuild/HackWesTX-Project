@@ -1,10 +1,23 @@
 import './Homepage.css'
+import io from 'socket.io-client'
+const socket = io.connect("http://localhost:3001")
+
 
 function Homepage(){
 
 
 
+
+
+   const createRoom = () => {
+socket.emit("create-room", res =>{
+    setCode
+})
+   }
+
 return (
+
+
 
 <div className="flex-container">
     <div className="header">
@@ -30,7 +43,7 @@ return (
 </input>
 </div>
 
-<button>CREATE ROOM</button>
+<button onClick={createRoom}>CREATE ROOM</button>
 <footer>
     <hr/>
     <div className="footer-contents">
@@ -42,6 +55,8 @@ return (
 </div>
 
 )
+
+
 
 
 
