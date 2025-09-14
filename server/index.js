@@ -53,6 +53,8 @@ io.on("connection", (socket) => {
         socket.join(code)
         cb?.({
             ok: true,
+            code,
+            hostId: socket.id,
             hostName: rooms[code].hostName,
             hostEmail: rooms[code].hostEmail
         })
