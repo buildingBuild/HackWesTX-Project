@@ -1,5 +1,5 @@
 <h2 align="center"> Live Lecture </h2>  
-An interactive, real-time classroom tool where students react with emojis/quick signals, ask questions without interrupting, and bookmark key moments—while professors see live engagement and receive an automatic post-class summary by email.
+An interactive, real-time classroom tool where students react with emojis/quick signals, ask questions without interrupting, and bookmark key moments—while professors see live engagement and receive an automatic post-class summary by email. (BUILT AS SOLO )
 
 ## OW TO RUN
 
